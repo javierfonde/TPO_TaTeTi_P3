@@ -21,8 +21,8 @@ public class Ejecucion {
 		tateti = new Tateti();
 		
 		tateti.inicializar();
-		
-		tateti.turno(true);
+		System.out.println("");
+		tateti.turno(false);
 		
 		if(tateti.esTurnoPersona()) {
 			pedirNumero();	
@@ -57,15 +57,28 @@ public class Ejecucion {
 			esCorrecto = tateti.jugar(fila, columna);
 			
 		} while (!esCorrecto);
+		String estadoPartida= tateti.finalizoJuego();
+		if(estadoPartida == " ") {
+			juegaMaquina();
+		}else {
+			finPartida();
+		}
 		
-		if(tateti.finalizoJuego() == 0) juegaMaquina();
 		
 	}
 
 	public static void juegaMaquina() {
 		
-		if(tateti.finalizoJuego() == 0) pedirNumero();
+		if(tateti.finalizoJuego() == " ") pedirNumero();
 		
 	}
 	
+	public static void finPartida() {
+		if (tateti.finalizoJuego()== "X") {
+			System.out.println("");
+			System.out.println("~~~~~FELICIDADES GANASTE~~~~~");
+		}else {
+			System.out.println("~~~~~PERDISTE~~~~~");
+		}
+	}
 }

@@ -4,7 +4,7 @@ import interfaces.ITateti;
 
 public class Tateti implements ITateti{
 
-	int[][] tablero = new int[3][3];
+	String[][] tablero = new String[3][3];
 	
 	// para saber quien tiene el turno, usamos este booleando, si es true es el turno del jugador, si es el false es de la cpu
 	boolean turnoDeJugador = false;
@@ -15,7 +15,7 @@ public class Tateti implements ITateti{
 		// inicializamos el tablero en 0, ya que vamos a representar al jugador con el valor 1 y a la cpu con el 2
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				tablero[i][j] = 0;
+				tablero[i][j] = " ";
 			}
 		}
 		
@@ -40,9 +40,9 @@ public class Tateti implements ITateti{
 	@Override
 	public boolean jugar(int posicionF, int posicionC) {
 		
-		if(tablero[posicionF][posicionC] == 0) {
+		if(tablero[posicionF][posicionC] == " ") {
 			
-			tablero[posicionF][posicionC] = 1;
+			tablero[posicionF][posicionC] = "X";
 			
 			mostrarTablero();
 			
@@ -50,7 +50,7 @@ public class Tateti implements ITateti{
 			
 		}
 		
-		System.err.println("La posiciÃ³n elegida ya fue utilizada");
+		System.err.println("La posicion elegida ya fue utilizada");
 			
 		return false;
 		
@@ -59,7 +59,7 @@ public class Tateti implements ITateti{
 	public void jugarMaquina() {
 		
 		if(true) {
-			System.out.println("ENCONTRÃ“ ESTRATEGIA GANADORA");
+			System.out.println("ENCONTRAR ESTRATEGIA GANADORA");
 		}
 		
 		System.out.println("MOSTRAR EL TABLERO");
@@ -67,31 +67,31 @@ public class Tateti implements ITateti{
 	}
 	
 	// si devuelve 0 no hay ganador, si es 1 o 2 es quien gano
-	public int finalizoJuego() {
+	public String finalizoJuego() {
 		
-		int ganador = 0;
+		String ganador = " ";
 		
 		// recorre todas las filas
 		for (int i = 0; i < 3; i++) {
-			if(tablero[i][0]!=0 && tablero[i][0]==tablero[i][1] && tablero[i][1]==tablero[i][2]) {
+			if(tablero[i][0]!=" " && tablero[i][0]==tablero[i][1] && tablero[i][1]==tablero[i][2]) {
 				return tablero[i][0];
 			}
 		}	
 		
 		// recorre todas las columnas
 		for (int j = 0; j < 3; j++) {
-			if(tablero[0][j]!=0 && tablero[0][j]==tablero[1][j] && tablero[1][j]==tablero[2][j]) {
+			if(tablero[0][j]!=" " && tablero[0][j]==tablero[1][j] && tablero[1][j]==tablero[2][j]) {
 				return tablero[0][j];
 			}
 		}	
 		
 		// diagonal izquierda a derecha, desde arriba hacia abajo
-		if(tablero[0][0]!=0 && tablero[0][0]==tablero[1][1] && tablero[1][1]==tablero[2][2]) {
+		if(tablero[0][0]!=" " && tablero[0][0]==tablero[1][1] && tablero[1][1]==tablero[2][2]) {
 			return tablero[0][0];
 		}
 		
 		//diagonal derecha a izquierda, desde arriba hacia abajo
-		if(tablero[0][2]!=0 && tablero[0][2]==tablero[1][1] && tablero[1][1]==tablero[2][0]) {
+		if(tablero[0][2]!=" " && tablero[0][2]==tablero[1][1] && tablero[1][1]==tablero[2][0]) {
 			return tablero[0][2];
 		}
 		
@@ -99,14 +99,24 @@ public class Tateti implements ITateti{
 	}
 	
 	public void mostrarTablero() {
-		System.out.println("----------");
+		System.out.println("———————————");
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				System.out.print(" " + tablero[i][j] + " ");
-				if(j==2) System.out.println();
+				if (j==2) {
+					System.out.print(" "+ tablero[i][j] + "");
+					System.out.println();
+				if (i!=2) {
+
+					System.out.println("———+———+———");
+				}
+					
+				}else {
+				System.out.print(" " + tablero[i][j] + " |");
+				}
 			}
+			
 		}
-		System.out.println("----------");
+		System.out.println("———————————");
 	}
 	
 	public boolean esTurnoPersona() {
