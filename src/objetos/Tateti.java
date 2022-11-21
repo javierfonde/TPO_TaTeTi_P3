@@ -6,45 +6,46 @@ public class Tateti implements ITateti{
 
 	String[][] tablero = new String[3][3];
 	
-	// para saber quien tiene el turno, usamos este booleando, si es true es el turno del jugador, si es el false es de la cpu
+	final String JUGADOR = "X";
+	
+	final String COMPUTADORA = "O";
+	
+	final String EMPATE = "E";
+	
+	final String VACIO = " ";
+	
 	boolean turnoDeJugador = false;
 	
 	@Override
 	public void inicializar() {
 		
-		// inicializamos el tablero en 0, ya que vamos a representar al jugador con el valor 1 y a la cpu con el 2
 		for (int i = 0; i < 3; i++) {
+			
 			for (int j = 0; j < 3; j++) {
-				tablero[i][j] = " ";
+				
+				this.tablero[i][j] = VACIO;
+				
 			}
+			
 		}
-		
-		
 		
 	}
 
 	@Override
 	public void turno(boolean esPrimeroJugador) {
 		
-		turnoDeJugador = esPrimeroJugador;
+		this.turnoDeJugador = esPrimeroJugador;
 		
 	}
-
-	/* 
-	* los parametros de entrada son la fila y la columna donde quiere poner su ficha
-	* 1 - 2 - 3
-	* 4 - 5 - 6
-	* 7 - 8 - 9
-	*/
 	
 	@Override
-	public boolean jugar(int posicionF, int posicionC) {
+	public boolean jugarJugador(int posicionF, int posicionC) {
 		
-		if(tablero[posicionF][posicionC] == " ") {
+		if(this.tablero[posicionF][posicionC] == VACIO) {
 			
-			tablero[posicionF][posicionC] = "X";
+			this.tablero[posicionF][posicionC] = JUGADOR;
 			
-			mostrarTablero();
+			this.mostrarTablero();
 			
 			return true;
 			
@@ -56,29 +57,62 @@ public class Tateti implements ITateti{
 		
 	}
 	
-	public void jugarMaquina() {
+	public void jugarComputadora() {
 		
-		if(true) {
-			System.out.println("ENCONTRAR ESTRATEGIA GANADORA");
+		int mejorScore = -10;
+		
+		int[] mejorMovimiento = new int[2];
+		
+		mejorMovimiento[0] = -1;
+		
+		mejorMovimiento[1] = -1;
+		
+		for (int i = 0; i < 3; i++) {
+			
+			for (int j = 0; j < 3; j++) {
+				
+				String valor = this.tablero[i][j];
+				
+				if(valor == VACIO) {
+					
+					this.tablero[i][j] = COMPUTADORA;
+					
+					int score = this.minMax(false);
+					
+					this.tablero[i][j] = VACIO;
+					
+					if(score > mejorScore) {
+						
+						mejorScore = score;
+						mejorMovimiento[0] = i;
+						mejorMovimiento[1] = j;
+						
+					}
+				}
+			}
 		}
 		
-		System.out.println("MOSTRAR EL TABLERO");
+		if(mejorMovimiento[0] != -1 && mejorMovimiento[1]!= -1) {
+			
+			this.tablero[mejorMovimiento[0]][mejorMovimiento[1]] = COMPUTADORA;
+			
+		}
+		
+		this.mostrarTablero();
 		
 	}
 	
 	// si devuelve 0 no hay ganador, si es 1 o 2 es quien gano
 	public String finalizoJuego() {
 		
-		String ganador = " ";
-		
-		// recorre todas las filas
+		// recorre filas
 		for (int i = 0; i < 3; i++) {
 			if(tablero[i][0]!=" " && tablero[i][0]==tablero[i][1] && tablero[i][1]==tablero[i][2]) {
 				return tablero[i][0];
 			}
 		}	
 		
-		// recorre todas las columnas
+		// recorre columnas
 		for (int j = 0; j < 3; j++) {
 			if(tablero[0][j]!=" " && tablero[0][j]==tablero[1][j] && tablero[1][j]==tablero[2][j]) {
 				return tablero[0][j];
@@ -95,32 +129,137 @@ public class Tateti implements ITateti{
 			return tablero[0][2];
 		}
 		
-		return ganador;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				if(tablero[i][j] == VACIO) {
+					return VACIO;
+				}
+			}
+		}
+		
+		return EMPATE;
+		
 	}
 	
 	public void mostrarTablero() {
-		System.out.println("———————————");
+		
+		System.out.println("-----------");
+		
 		for (int i = 0; i < 3; i++) {
+			
 			for (int j = 0; j < 3; j++) {
+				
 				if (j==2) {
-					System.out.print(" "+ tablero[i][j] + "");
+					
+					System.out.print(" "+ this.tablero[i][j] + "");
 					System.out.println();
-				if (i!=2) {
+					
+					if (i!=2) {
 
-					System.out.println("———+———+———");
-				}
+						System.out.println("---+---+---");
+					
+					}
 					
 				}else {
-				System.out.print(" " + tablero[i][j] + " |");
+					
+					System.out.print(" " + this.tablero[i][j] + " |");
+				
 				}
 			}
 			
 		}
-		System.out.println("———————————");
+		
+		System.out.println("-----------");
+		
 	}
 	
 	public boolean esTurnoPersona() {
+		
 		return this.turnoDeJugador;
+		
 	}
 
+	private int minMax(boolean isMaximizing) {
+		
+		if(this.finalizoJuego() == JUGADOR) return -1;
+		
+		else if(this.finalizoJuego() == COMPUTADORA) return 1;
+		
+		else if(this.finalizoJuego() == EMPATE) return 0;
+			
+		if(isMaximizing) {
+			
+			int alfa = -10;
+			
+			for (int i = 0; i < 3; i++) {
+				
+				for (int j = 0; j < 3; j++) {
+					
+					String valor = this.tablero[i][j];
+					
+					if(valor == VACIO) {
+						
+						this.tablero[i][j] = COMPUTADORA;
+						
+						int score = this.minMax(false);
+						
+						this.tablero[i][j] = VACIO;
+						
+						if( score > alfa ) {
+							
+							alfa = score;
+							
+						}
+					}
+				}
+			}
+			
+			return alfa;
+			
+		}else {
+			
+			int beta = 10;
+			
+			for (int i = 0; i < 3; i++) {
+				
+				for (int j = 0; j < 3; j++) {
+					
+					String valor = this.tablero[i][j];
+					
+					if(valor == VACIO) {
+						
+						this.tablero[i][j] = JUGADOR;
+						
+						int score = this.minMax(true);
+						
+						this.tablero[i][j] = VACIO;
+						
+						if( score < beta ) {
+							
+							beta = score;
+							
+						}
+					}
+				}
+			}
+			
+			return beta;
+		}	
+	}
+	
+	public String getJugador() {
+		return this.JUGADOR;
+	}
+	
+	public String getComputadora() {
+		return this.COMPUTADORA;
+	}
+	
+	public String getEmpate() {
+		return this.EMPATE;
+	}
+
+	public String getVacio() {
+		return this.VACIO;
+	}
 }

@@ -6,6 +6,6 @@ public interface ITateti {
 
     public void turno(boolean esPrimeroJugador);
 
-    public boolean jugar(int posicionF, int posicionC);
+    public boolean jugarJugador(int posicionF, int posicionC);
 
 }

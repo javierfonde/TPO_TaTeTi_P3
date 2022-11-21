@@ -14,25 +14,39 @@ public class Ejecucion {
 
 		scan = new Scanner(System.in);
 		
-		// dependiendo del valor del booleano que retorna jugar, ver si pedir de nuevo o no
-		
-		// preguntar si finalizo el juego luego de jugar y jugarMaquina
-		
 		tateti = new Tateti();
 		
 		tateti.inicializar();
-		System.out.println("");
-		tateti.turno(false);
+		
+		boolean arrancaJugador = preguntarQuienArranca();
+		
+		tateti.turno(arrancaJugador);
 		
 		if(tateti.esTurnoPersona()) {
-			pedirNumero();	
+			
+			pedirNumero();
+			
 		}else {
+			
 			juegaMaquina();
+			
 		}
 		
 		
 	}
 	
+	private static boolean preguntarQuienArranca() {
+		
+		System.out.println("Si quiere que comience el jugador ingrese: 1");
+		
+		System.out.println("Si quiere que comience la computadora ingrese: 2");
+		
+		int quienIngresa = scan.nextInt();
+		
+		return quienIngresa == 1;
+		
+	}
+
 	public static void pedirNumero() {
 		
 		boolean esCorrecto = false;
@@ -40,28 +54,43 @@ public class Ejecucion {
 		do {
 			
 			System.out.println("Ingrese el numero de fila (1,2 o 3)");
+			
 			int fila = scan.nextInt()-1;
+			
 			while(fila < 0 || fila > 2) {
+				
 				System.out.println("ERROR. Ingrese el numero de fila VALIDO (1,2 o 3)");
+				
 				fila = scan.nextInt()-1;
+				
 			}
 			
 			System.out.println("Ingrese el numero de columna (1,2 o 3)");
+			
 			int columna = scan.nextInt()-1;
+			
 			while(columna < 0 || columna > 2) {
+				
 				System.out.println("ERROR.Ingrese el numero de columna VALIDO (1,2 o 3)");
+				
 				columna = scan.nextInt()-1;
+				
 			}
 			
-			
-			esCorrecto = tateti.jugar(fila, columna);
+			esCorrecto = tateti.jugarJugador(fila, columna);
 			
 		} while (!esCorrecto);
+		
 		String estadoPartida= tateti.finalizoJuego();
+		
 		if(estadoPartida == " ") {
+			
 			juegaMaquina();
+			
 		}else {
+			
 			finPartida();
+			
 		}
 		
 		
@@ -69,16 +98,34 @@ public class Ejecucion {
 
 	public static void juegaMaquina() {
 		
-		if(tateti.finalizoJuego() == " ") pedirNumero();
+		tateti.jugarComputadora();
+		
+		if(tateti.finalizoJuego() == " ") {
+			
+			pedirNumero();
+			
+		} else {
+			
+			finPartida();
+			
+		}
 		
 	}
 	
 	public static void finPartida() {
-		if (tateti.finalizoJuego()== "X") {
-			System.out.println("");
+		
+		if (tateti.finalizoJuego()== tateti.getJugador()) {
+			
 			System.out.println("~~~~~FELICIDADES GANASTE~~~~~");
-		}else {
+			
+		}else if(tateti.finalizoJuego()== tateti.getComputadora()){
+			
 			System.out.println("~~~~~PERDISTE~~~~~");
+			
+		}else if(tateti.finalizoJuego()== tateti.getEmpate()){
+			
+			System.out.println("~~~~~EMPATARON~~~~~");
+			
 		}
 	}
 }
