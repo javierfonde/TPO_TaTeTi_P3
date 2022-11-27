@@ -12,24 +12,26 @@ public class Ejecucion {
 	
 	public static void main(String[] args) {
 
+		// inicializamos un scanner para tomar los valores por teclado 
 		scan = new Scanner(System.in);
 		
+		// inicializamos un objeto tateti para poder jugar
 		tateti = new Tateti();
 		
+		// llamamos a inicializar para poner todas las opciones en vacio
 		tateti.inicializar();
 		
+		// preguntamos por consola si quiere que comience el jugador o la computadora
 		boolean arrancaJugador = preguntarQuienArranca();
 		
+		// le damos a tateti el valor de la pregunta de quien arranca
 		tateti.turno(arrancaJugador);
 		
-		if(tateti.esTurnoPersona()) {
-			
+		// verificamos quien comienza y llamamos al jugador o a la computadora segun dependa el caso
+		if(tateti.esTurnoPersona()) {	
 			pedirNumero();
-			
 		}else {
-			
 			juegaMaquina();
-			
 		}
 		
 		
@@ -37,16 +39,32 @@ public class Ejecucion {
 	
 	private static boolean preguntarQuienArranca() {
 		
-		System.out.println("Si quiere que comience el jugador ingrese: 1");
+		int quienIngresa = 0; 
 		
-		System.out.println("Si quiere que comience la computadora ingrese: 2");
-		
-		int quienIngresa = scan.nextInt();
+		do {
+			
+			System.out.println("Si quiere que comience el jugador ingrese: 1");
+			
+			System.out.println("Si quiere que comience la computadora ingrese: 2");
+			
+			quienIngresa = scan.nextInt();
+			
+		}while(quienIngresa != 1 && quienIngresa != 2);
 		
 		return quienIngresa == 1;
 		
 	}
 
+	/*
+	 * solicitamos que el jugador ingrese la fila y columna donde quiere ingresar su ficha
+	 * verificamos que sea una posición valida
+	 * si es invalida le pedimos que reingrese
+	 * si es valida ingresamos su ficha en el tablero
+	 * mostramos el tablero
+	 * luego verificamos si se puede seguir jugando
+	 * si se puede llamamos a que juegue la maquina
+	 * si no, mostramos el resultado final de la partida
+	 */
 	public static void pedirNumero() {
 		
 		boolean esCorrecto = false;
@@ -83,49 +101,41 @@ public class Ejecucion {
 		
 		String estadoPartida= tateti.finalizoJuego();
 		
-		if(estadoPartida == " ") {
+		if(estadoPartida == tateti.getVacio()) {
 			
 			juegaMaquina();
 			
 		}else {
 			
-			finPartida();
+			tateti.finPartida();
 			
 		}
 		
 		
 	}
+	
+	/*
+	 * hacemos jugar a la maquina
+	 * luego verificamos si se puede seguir jugando
+	 * si se puede llamamos a que juegue el jugador
+	 * si no, mostramos el resultado final de la partida
+	 */
 
 	public static void juegaMaquina() {
 		
 		tateti.jugarComputadora();
 		
-		if(tateti.finalizoJuego() == " ") {
+		if(tateti.finalizoJuego() == tateti.getVacio()) {
 			
 			pedirNumero();
 			
 		} else {
 			
-			finPartida();
+			tateti.finPartida();
 			
 		}
 		
 	}
 	
-	public static void finPartida() {
-		
-		if (tateti.finalizoJuego()== tateti.getJugador()) {
-			
-			System.out.println("~~~~~FELICIDADES GANASTE~~~~~");
-			
-		}else if(tateti.finalizoJuego()== tateti.getComputadora()){
-			
-			System.out.println("~~~~~PERDISTE~~~~~");
-			
-		}else if(tateti.finalizoJuego()== tateti.getEmpate()){
-			
-			System.out.println("~~~~~EMPATARON~~~~~");
-			
-		}
-	}
+	
 }

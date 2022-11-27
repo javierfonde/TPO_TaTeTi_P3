@@ -1,5 +1,7 @@
 package interfaces;
 
+// creamos una interfaz para estructurar mejor el Objeto Tateti
+
 public interface ITateti {
 
     public void inicializar();
