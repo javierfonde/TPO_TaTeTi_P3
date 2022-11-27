@@ -238,8 +238,6 @@ public class Tateti implements ITateti{
 						
 						this.tablero[i][j] = COMPUTADORA;
 						
-						this.mostrarTablero();
-						
 						int score = this.minMax(false);
 						
 						this.tablero[i][j] = VACIO;
