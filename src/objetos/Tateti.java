@@ -16,6 +16,9 @@ public class Tateti implements ITateti{
 	// booleano que nos dice si arranca jugando el jugador o no
 	private boolean turnoDeJugador = false;
 	
+	// booleano que cambia cuando ya encontro una jugada si o si ganadora
+	private boolean yaGanaCompu = false;
+	
 	// PUNTO 1
 	// funcion que setea todos los valores de la matriz tablero en "vacio"
 	@Override
@@ -110,6 +113,13 @@ public class Tateti implements ITateti{
 					}
 				}
 			}
+		}
+		
+		if(!yaGanaCompu && mejorScore == 1) {
+			yaGanaCompu = true;
+			System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * *");
+			System.out.println("La computadora ya encontro una estrategia ganadora");
+			System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * *");
 		}
 		
 		if(mejorMovimiento[0] != -1 && mejorMovimiento[1]!= -1) {
@@ -237,8 +247,6 @@ public class Tateti implements ITateti{
 					if(valor == VACIO) {
 						
 						this.tablero[i][j] = COMPUTADORA;
-						
-						this.mostrarTablero();
 						
 						int score = this.minMax(false);
 						
